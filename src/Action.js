@@ -1,6 +1,11 @@
 import React from "react"
 import "./css/Action.css"
 
+const getXivApiEndpoint = () => {
+    const match = /[?&]XIVAPI_ENDPOINT=(https?:\/\/[^&]+)/.exec(window.location.search);
+    return match ? match[1] : 'https://xivapi.com';
+};
+
 const gcdOverrides = new Set([
 	15997, //standard step
 	15998, //technical step
@@ -59,6 +64,8 @@ const actionMap = new Map()
 export default function Action({ actionId, additionalClasses }) {
 	const [apiData, setApiData] = React.useState()
 
+	const xivApiEndpoint = getXivApiEndpoint();
+
 	React.useEffect(() => {
 		const mapData = actionMap.get(actionId)
 		if (mapData != null) {
@@ -68,7 +75,7 @@ export default function Action({ actionId, additionalClasses }) {
 
 		let current = true
 		void (async () => {
-			const data = await (await fetch(`https://xivapi.com/Action/${actionId}?columns=Icon,Name,ActionCategoryTargetID`, {
+			const data = await (await fetch(`${xivApiEndpoint}/Action/${actionId}?columns=Icon,Name,ActionCategoryTargetID`, {
 				mode: "cors"
 			})).json()
 			if (current) {
@@ -94,7 +101,7 @@ export default function Action({ actionId, additionalClasses }) {
 					? `gcd ${additionalClasses}`
 					: `ogcd ${additionalClasses}`
 			}
-			src={`https://xivapi.com/${apiData.Icon}`}
+			src={`${xivApiEndpoint}/${apiData.Icon}`}
 			alt={apiData.Name || ""}
 		/>
 	)
