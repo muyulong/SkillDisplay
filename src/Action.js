@@ -61,10 +61,10 @@ const ogcdOverrides = new Set([
 
 const actionMap = new Map()
 
+const xivApiEndpoint = getXivApiEndpoint();
+
 export default function Action({ actionId, additionalClasses }) {
 	const [apiData, setApiData] = React.useState()
-
-	const xivApiEndpoint = getXivApiEndpoint();
 
 	React.useEffect(() => {
 		const mapData = actionMap.get(actionId)
